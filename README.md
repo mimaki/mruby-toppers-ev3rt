@@ -7,27 +7,27 @@ mruby-toppers-ev3rt
 
 ### EV3RT::Balancer
 |method|description|
-|-|-|
+|:--|:--|
 |Balancer.new|Initialize balancer|
 |Balancer#control|Call balancer API|
 |Balancer#reset|Reset balancer|
 
 ### EV3RT::Battery
 |method|description|
-|-|-|
+|:--|:--|
 |Battery.mA|Get the current draw from the battery|
 |Battery.mV|Get battery battery voltage|
 
 ### EV3RT::Button  
 |method|description|
-|-|-|
+|:--|:--|
 |Button.new|Create Button object|
 |Button.[]|Get Button object|
 |Button#pressed?|Get button status|
 
 ### EV3RT::GyroSensor
 |method|description|
-|-|-|
+|:--|:--|
 |GyroSensor.new|Create GyroSensor object|
 |GyroSensor#angle|Get gyro angle|
 |GyroSensor#rate|Get gyro rate|
@@ -37,7 +37,7 @@ mruby-toppers-ev3rt
 
 ### EV3RT::LCD
 |method|description|
-|-|-|
+|:--|:--|
 |LCD.new|Initialize LCD|
 |LCD#font=|Set current font size|
 |LCD#font|Get current font size|
@@ -55,13 +55,13 @@ mruby-toppers-ev3rt
 
 ### EV3RT::LED
 |method|description|
-|-|-|
+|:--|:--|
 |LED.color=c|Light LED|
 |LED.off|LED turn off|
 
 ### EV3RT::Motor
 |method|description|
-|-|-|
+|:--|:--|
 |Motor.new|Create Motor object|
 |Motor#power=|Sets motor power|
 |Motor#power|Gets motor current power|
@@ -72,7 +72,7 @@ mruby-toppers-ev3rt
 
 ### EV3RT::ColorSensor
 |method|description|
-|-|-|
+|:--|:--|
 |ColorSensor.new|Create ColorSensor object|
 |ColorSensor#ambient|Get ambient light level|
 |ColorSensor#color|Get color|
@@ -87,25 +87,25 @@ mruby-toppers-ev3rt
 
 ### EV3RT::SerialPort
 |method|description|
-|-|-|
+|:--|:--|
 |SerialPort.new|Open serial port|
 
 ### EV3RT::Sound
 |method|description|
-|-|-|
+|:--|:--|
 |Sound.tone|Play a tone, given its tone and duration|
 |Sound.volume=|Set volume level|
 |Sound.stop|Stop sound|
 
 ### EV3RT::TouchSensor
 |method|description|
-|-|-|
+|:--|:--|
 |TouchSensor.new|Create TouchSensor object|
 |TouchSensor#pressed?|Get touch sensor status|
 
 ### EV3RT::UltrasonicSensor
 |method|description|
-|-|-|
+|:--|:--|
 |UltrasonicSensor.new|Create UltrasonicSensor object|
 |UltrasonicSensor#distance|Measure distance to object in front of sensor|
 |UltrasonicSensor#listen|Listen for the presence of other ultrasonic sensor|
