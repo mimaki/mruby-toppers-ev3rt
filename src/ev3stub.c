@@ -184,6 +184,14 @@ ev3_color_sensor_get_reflect(int32_t port)
   return 0;
 }
 
+void
+ev3_color_sensor_get_rgb_raw(int32_t port, rgb_raw_t *prgb)
+{
+  prgb->r = 0;
+  prgb->g = 0;
+  prgb->b = 0;
+}
+
 int32_t
 ev3_gyro_sensor_get_angle(int32_t port)
 {

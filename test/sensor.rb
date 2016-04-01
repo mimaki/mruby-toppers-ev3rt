@@ -75,6 +75,16 @@ assert('ColorSensor', 'reflect') do
   sen.reflect
 end
 
+assert('ColorSensor', 'rgb') do
+  sen = EV3RT::ColorSensor.new(:port_1)
+  rgb = sen.rgb
+  rgb.class == Array &&
+  rgb.size == 3 #&&
+  rgb[0].class == Fixnum &&
+  rgb[1].class == Fixnum &&
+  rgb[2].class == Fixnum
+end
+
 assert('ColorSensor', 'black?') do
   EV3RT::ColorSensor.new(:port_1).black? == false
 end
