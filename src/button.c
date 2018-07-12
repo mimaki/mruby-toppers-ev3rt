@@ -84,7 +84,7 @@ mrb_btn_pressed(mrb_state *mrb, mrb_value self)
 
   key = mrb_iv_get(mrb, self, mrb_intern_lit(mrb, "@key"));
   if (!mrb_nil_p(key)) {
-    pressed = ev3_button_is_pressed((int16_t)mrb_fixnum(key));
+    pressed = (ev3_button_is_pressed((int16_t)mrb_fixnum(key)) != 0);
   }
 
   return mrb_bool_value(pressed);
