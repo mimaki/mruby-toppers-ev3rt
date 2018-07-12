@@ -111,7 +111,128 @@ mruby-toppers-ev3rt
 |UltrasonicSensor#listen|Listen for the presence of other ultrasonic sensor|
 
 ## How to use
-Coming soon.
+
+### 1. Prepare the files.
+Please prepare the following files.
+
+#### build_config.rb
+Add the following lines to the `build_config.rb`
+```ruby
+# Difine arm-none-eabi build settings
+MRuby::CrossBuild.new('arm-ev3rt') do |conf|
+  toolchain :gccarm
+
+  conf.build_mrbtest_lib_only
+
+  conf.gembox 'arm-ev3rt'
+
+  conf.cc.defines = %w(EV3)
+
+  conf.bins = %w()
+end
+
+MRuby::CrossBuild.new('arm-ev3rt-debug') do |conf|
+  toolchain :gccarm
+
+  conf.build_mrbtest_lib_only
+
+  enable_debug
+
+  conf.gembox 'arm-ev3rt'
+
+  conf.cc.defines += %w(EV3)
+  conf.cc.defines += %w(ENABLE_DEBUG)
+
+  conf.bins = %w()
+end
+```
+#### gccarm.rake
+Create `/mruby/tasks/toolchains/gccarm.rake`, writes the following lines.
+```ruby
+MRuby::Toolchain.new(:gccarm) do |conf|
+  # C compiler settings
+  [conf.cc, conf.cxx, conf.objc, conf.asm].each do |cc|
+    cc.command = ENV['CC'] || 'arm-none-eabi-gcc'
+    cc.flags = [ENV['CFLAGS'] || %w(
+      -std=gnu99
+      -mlittle-endian
+      -O2
+      -Wall
+      -Wl,--no-warn-mismatch
+    )]
+    cc.defines = %w(
+    )
+  end
+
+  # Archiver settings
+  conf.archiver do |archiver|
+    archiver.command = ENV['AR'] || 'arm-none-eabi-ar'
+    archiver.archive_options = 'rcs %{outfile} %{objs}'
+  end
+end
+```
+
+#### arm-ev3rt.gembox
+Create `/mruby/mrbgems/arm-ev3rt.gembox`, writes the following lines.
+```ruby
+MRuby::GemBox.new do |conf|
+  (list of mrbgems you want to use...)
+
+  # Use EV3RT libraries
+  conf.gem :git => "https://github.com/mimaki/mruby-toppers-ev3rt.git"
+end
+```
+
+### 2. Generate a mruby Library.
+Type the `make` in `/mruby`.
+`libmruby.a` is stored in `/mruby/build/arm-ev3rt/lib/`.
+
+### 3. Link a mruby Library.
+It shows an example of `Makefile.inc`.
+```
+LIBS += -L../../../mruby/build/arm-ev3rt/lib/ -lmruby -lm
+INCLUDES += -I../../../mruby/include
+```
+
+### 4. Code the mruby of start-up program.
+It shows an example of `app.c`.
+
+```c
+#include "ev3api.h"
+#include "app.h"
+#include "mruby.h"
+#include "mruby/dump.h"
+#include "mruby/hash.h"
+#include "mruby/variable.h"
+
+#if defined(BUILD_MODULE)
+#include "module_cfg.h"
+#else
+#include "kernel_cfg.h"
+#endif
+
+void _fini(void)
+{
+}
+
+void main_task(intptr_t unused)
+{
+	mrb_state *mrb = mrb_open();
+	mrbc_context *c;
+	FILE* rbfp;
+
+	c = mrbc_context_new(mrb);
+
+	rbfp = fopen("app.mrb", "rb");
+	if(rbfp != 0) {
+		mrb_load_irep_file_cxt(mrb, rbfp, c);
+		fclose(rbfp);
+	}
+
+	mrb_close(mrb);
+	ext_tsk();
+}
+```
 
 ## License
-MIT
+mruby-toppers-ev3rt is released under the [MIT License](LICENSE).

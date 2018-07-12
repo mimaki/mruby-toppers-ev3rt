@@ -2,6 +2,7 @@
 #include <string.h>
 #include "mruby.h"
 #include "mruby/variable.h"
+#include "mruby/array.h"
 #include "mruby/hash.h"
 #include "ev3if.h"
 #include "rtosif.h"
@@ -104,6 +105,28 @@ mrb_color_sensor_get_reflect(mrb_state *mrb, mrb_value self)
   mrb_int port;
   port = mrb_fixnum(mrb_iv_get(mrb, self, mrb_intern_lit(mrb, "@port")));
   return mrb_fixnum_value(ev3_color_sensor_get_reflect(port));
+}
+
+/*
+ *  call-seq:
+ *     cs.rgb  # => Array
+ *
+ *  Get the RGB raw value by a color sensor.
+ *
+ *  Returns RGB raw level. [red, blue, green]
+ */
+static mrb_value
+mrb_color_sensor_get_rgb_raw(mrb_state *mrb, mrb_value self)
+{
+  mrb_int port;
+  rgb_raw_t rgb;
+  mrb_value ary = mrb_ary_new_capa(mrb, 3);
+  port = mrb_fixnum(mrb_iv_get(mrb, self, mrb_intern_lit(mrb, "@port")));
+  ev3_color_sensor_get_rgb_raw(port, &rgb);
+  mrb_ary_push(mrb, ary, mrb_fixnum_value(rgb.r));
+  mrb_ary_push(mrb, ary, mrb_fixnum_value(rgb.g));
+  mrb_ary_push(mrb, ary, mrb_fixnum_value(rgb.b));
+  return ary;
 }
 
 static inline mrb_value
@@ -466,6 +489,7 @@ mrb_ev3_sensor_init(mrb_state *mrb, struct RClass *ev3, struct RClass *dev)
   mrb_define_method(mrb, cls, "ambient",    mrb_color_sensor_get_ambient, MRB_ARGS_NONE());
   mrb_define_method(mrb, cls, "color",      mrb_color_sensor_get_color,   MRB_ARGS_NONE());
   mrb_define_method(mrb, cls, "reflect",    mrb_color_sensor_get_reflect, MRB_ARGS_NONE());
+  mrb_define_method(mrb, cls, "rgb",        mrb_color_sensor_get_rgb_raw, MRB_ARGS_NONE());
   mrb_define_method(mrb, cls, "black?",     mrb_color_sensor_is_black,    MRB_ARGS_NONE());
   mrb_define_method(mrb, cls, "blue?",      mrb_color_sensor_is_blue,     MRB_ARGS_NONE());
   mrb_define_method(mrb, cls, "green?",     mrb_color_sensor_is_green,    MRB_ARGS_NONE());

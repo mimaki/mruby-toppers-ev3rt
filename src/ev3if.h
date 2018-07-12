@@ -93,6 +93,12 @@ typedef struct {
 	char	 name[TMAX_FILENAME_LEN + 1];	//!< \~English File name          \~Japanese ファイル名
 } fileinfo_t;
 
+typedef struct {
+  uint16_t r;
+  uint16_t g;
+  uint16_t b;
+} rgb_raw_t;
+
 typedef enum {
     LEFT_BUTTON  = 0, //!< \~English Left button       \~Japanese 左ボタン
     RIGHT_BUTTON = 1, //!< \~English Right button    \~Japanese 右ボタン
@@ -192,6 +198,7 @@ int32_t ev3_sensor_config(int32_t, int32_t);
 int32_t ev3_color_sensor_get_ambient(int32_t);
 int32_t ev3_color_sensor_get_color(int32_t);
 int32_t ev3_color_sensor_get_reflect(int32_t);
+void ev3_color_sensor_get_rgb_raw(int32_t, rgb_raw_t*);
 int32_t ev3_gyro_sensor_get_angle(int32_t);
 int32_t ev3_gyro_sensor_get_rate(int32_t);
 int32_t ev3_gyro_sensor_reset(int32_t);
